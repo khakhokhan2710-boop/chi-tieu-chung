@@ -868,16 +868,6 @@ function setFilter(f) {
   render();
 }
 
-// === INCOME ===
-function addIncome() {
-  const amt = prompt('Nhap so tien thu nhap them:');
-  if (!amt || isNaN(amt) || Number(amt) <= 0) { toast('Nhap so tien!', true); return; }
-  const note = prompt('Ghi chu (vd: lam them, thuong...):') || '';
-  incomes.unshift({ date: today(), amount: Number(amt), note });
-  save();
-  toast('Da them thu nhap');
-}
-
 // === CRUD ===
 function submitEntry() {
   const amt = parseInt(document.getElementById('fAmt').value);
@@ -905,52 +895,106 @@ function delEntry(i) {
   toast('Da xoa');
 }
 
+// === SAVE / LOAD (JSONP) ===
+var loadAttempts = 0;
+var scriptTag = null;
+
+function jsonp(url, cb) {
+  var callbackName = 'jsonp_' + Date.now();
+  window[callbackName] = function(data) { delete window[callbackName]; cb(data); };
+  var s = document.createElement('script');
+  s.src = url + (url.indexOf('?') > -1 ? '&' : '?') + 'callback=' + callbackName;
+  document.head.appendChild(s);
+  setTimeout(function() { if (window[callbackName]) { delete window[callbackName]; cb(null); } }, 8000);
+}
+
 function save() {
-  const data = JSON.stringify({ entries, incomes });
+  var data = JSON.stringify({ entries: entries, incomes: incomes });
   if (!SHEET_URL) {
     localStorage.setItem('chitieu_data', data);
     render();
     return;
   }
+  // Save via POST (no-cors - fire and forget)
   fetch(SHEET_URL, {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'application/json' },
     body: data
-  }).then(r => { render(); }).catch(e => { render(); });
+  }).then(function() { render(); }).catch(function() { render(); });
 }
 
 function load() {
   if (!SHEET_URL) {
     try {
-      const d = localStorage.getItem('chitieu_data');
-      if (d) { const p = JSON.parse(d); entries = p.entries || []; incomes = p.incomes || []; }
+      var d = localStorage.getItem('chitieu_data');
+      if (d) { var p = JSON.parse(d); entries = p.entries || []; incomes = p.incomes || []; }
     } catch(e) {}
     useDemoData();
     return;
   }
   loading = true;
-  fetch(SHEET_URL + '?action=read')
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      loading = false;
-      if (data && data.entries) {
-        entries = (data.entries || []).map(function(e) { return {date:e.date, category:e.category, amount:Number(e.amount), person:e.person, note:e.note}; });
-        incomes = (data.incomes || []).map(function(e) { return {date:e.date, amount:Number(e.amount), note:e.note}; });
-      }
+  jsonp(SHEET_URL + '?action=read', function(data) {
+    loading = false;
+    if (data && data.entries) {
+      entries = (data.entries || []).map(function(e) { return {date:e.date, category:e.category, amount:Number(e.amount), person:e.person, note:e.note}; });
+      incomes = (data.incomes || []).map(function(e) { return {date:e.date, amount:Number(e.amount), note:e.note}; });
       render();
-    })
-    .catch(function(err) {
-      loading = false;
+    } else {
       toast('Khong the tai du lieu!', true);
       useDemoData();
-    });
+    }
+  });
+}
+
+// === INCOME ===
+function addIncome() {
+  const amt = prompt('Nhap so tien thu nhap them:');
+  if (!amt || isNaN(amt) || Number(amt) <= 0) { toast('Nhap so tien!', true); return; }
+  const note = prompt('Ghi chu (vd: lam them, thuong...):') || '';
+  incomes.unshift({ date: today(), amount: Number(amt), note });
+  save();
+  toast('Da them thu nhap');
+}
+
+// === CRUD ===
+function submitEntry() {
+  var amt = parseInt(document.getElementById('fAmt').value);
+  var cat = document.getElementById('fCat').value;
+  var dt = document.getElementById('fDate').value;
+  var note = document.getElementById('fNote').value.trim();
+  if (!amt || amt <= 0) { toast('Nhap so tien!', true); return; }
+  if (!dt) { toast('Chon ngay!', true); return; }
+  if (editIdx >= 0) {
+    entries[editIdx] = { date: dt, category: cat, amount: amt, person: selPerson, note: note };
+    toast('Da cap nhat');
+  } else {
+    entries.unshift({ date: dt, category: cat, amount: amt, person: selPerson, note: note });
+    toast('Da them');
+  }
+  save();
+  closeForm();
+}
+
+function delEntry(i) {
+  entries.splice(i, 1);
+  save();
+  toast('Da xoa');
 }
 
 function useDemoData() {
   if (entries.length > 0) { render(); return; }
-  entries = [ /*...demo...*/ ];
-  incomes = [{ date:'2026-07-05', amount:500000, note:'Lam them cuoi tuan' }];
+  entries = [
+    { date: '2026-07-05', category: 'an', amount: 35000, person: 'kha', note: 'An sang + cf' },
+    { date: '2026-07-05', category: 'an', amount: 42000, person: 'vy', note: 'An toi' },
+    { date: '2026-07-06', category: 'di_lai', amount: 20000, person: 'kha', note: 'Xe om' },
+    { date: '2026-07-06', category: 'an', amount: 15000, person: 'kha', note: 'Banh my' },
+    { date: '2026-07-06', category: 'mua_sam', amount: 120000, person: 'vy', note: 'My pham' },
+    { date: '2026-07-07', category: 'an', amount: 28000, person: 'kha', note: 'Com trua' },
+    { date: '2026-07-07', category: 'an', amount: 55000, person: 'vy', note: 'An vat' },
+    { date: '2026-07-07', category: 'giai_tri', amount: 45000, person: 'kha', note: 'Net' },
+  ];
+  incomes = [{ date: '2026-07-05', amount: 500000, note: 'Lam them cuoi tuan' }];
   save();
 }
 
@@ -1000,6 +1044,7 @@ function render() {
   const vyAmt = entries.filter(e => e.person === 'vy').reduce((s, e) => s + e.amount, 0);
   const todayAmt = entries.filter(e => e.date === today()).reduce((s, e) => s + e.amount, 0);
   const foodToday = entries.filter(e => e.date === today() && e.category === 'an').reduce((s, e) => s + e.amount, 0);
+  const extraTotal = incomes.reduce(function(s, e) { return s + e.amount; }, 0);
   const left = BUDGET + extraTotal - total;
   const foodPct = Math.min(100, Math.round(foodAmt / FOOD_GOAL * 100));
   const spentPct = Math.min(100, Math.round(total / BUDGET * 100));
@@ -1013,7 +1058,6 @@ function render() {
 
   // Budget
   document.getElementById('budSpent').textContent = fmt(total);
-  const extraTotal = incomes.reduce((s, e) => s + e.amount, 0);
   document.getElementById('budExtra').textContent = '+' + fmt(extraTotal);
   document.getElementById('budRemain').textContent = fmt(Math.max(left, 0));
   document.getElementById('budRemain').style.color = left < 0 ? 'var(--color-ember)' : '';

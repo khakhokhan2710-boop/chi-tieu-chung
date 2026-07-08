@@ -8,7 +8,7 @@ var SHEET_INCOME = 'ThuNhap';
 
 function doGet(e) {
   var action = 'read';
-  var callback = '';
+  var callback = 'callback';
   if (e && e.parameter && e.parameter.action) {
     action = e.parameter.action;
   }
@@ -17,14 +17,15 @@ function doGet(e) {
   }
   if (action === 'read') {
     var result = getDataRaw();
-    if (callback) {
-      return ContentService
-        .createTextOutput(callback + '(' + JSON.stringify(result) + ')')
-        .setMimeType(ContentService.MimeType.JAVASCRIPT);
-    }
-    return json(result);
+    var js = callback + '(' + JSON.stringify(result) + ');';
+    return ContentService
+      .createTextOutput(js)
+      .setMimeType(ContentService.MimeType.JAVASCRIPT);
   }
-  return json({ error: 'unknown action' });
+  var errJs = callback + '(' + JSON.stringify({ error: 'unknown action' }) + ');';
+  return ContentService
+    .createTextOutput(errJs)
+    .setMimeType(ContentService.MimeType.JAVASCRIPT);
 }
 
 function doPost(e) {
