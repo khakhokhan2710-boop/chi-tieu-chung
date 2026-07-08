@@ -868,33 +868,6 @@ function setFilter(f) {
   render();
 }
 
-// === CRUD ===
-function submitEntry() {
-  const amt = parseInt(document.getElementById('fAmt').value);
-  const cat = document.getElementById('fCat').value;
-  const dt = document.getElementById('fDate').value;
-  const note = document.getElementById('fNote').value.trim();
-
-  if (!amt || amt <= 0) { toast('Nhap so tien!', true); return; }
-  if (!dt) { toast('Chon ngay!', true); return; }
-
-  if (editIdx >= 0) {
-    entries[editIdx] = { ...entries[editIdx], amount: amt, category: cat, date: dt, person: selPerson, note };
-    toast('Da cap nhat');
-  } else {
-    entries.unshift({ date: dt, category: cat, amount: amt, person: selPerson, note });
-    toast('Da them');
-  }
-  save();
-  closeForm();
-}
-
-function delEntry(i) {
-  entries.splice(i, 1);
-  save();
-  toast('Da xoa');
-}
-
 // === SAVE / LOAD (JSONP) ===
 var loadAttempts = 0;
 var scriptTag = null;
