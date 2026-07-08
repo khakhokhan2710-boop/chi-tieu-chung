@@ -930,26 +930,21 @@ function load() {
     return;
   }
   loading = true;
-  // Use JSONP-like workaround: fetch via iframe proxy
-  var s = document.createElement('script');
-  s.src = SHEET_URL + '?action=read&callback=handleSheetData';
-  document.head.appendChild(s);
-  setTimeout(function() {
-    if (loading) {
+  fetch(SHEET_URL + '?action=read')
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
       loading = false;
-      toast('Khong the tai du lieu tu sheet!', true);
+      if (data && data.entries) {
+        entries = (data.entries || []).map(function(e) { return {date:e.date, category:e.category, amount:Number(e.amount), person:e.person, note:e.note}; });
+        incomes = (data.incomes || []).map(function(e) { return {date:e.date, amount:Number(e.amount), note:e.note}; });
+      }
+      render();
+    })
+    .catch(function(err) {
+      loading = false;
+      toast('Khong the tai du lieu!', true);
       useDemoData();
-    }
-  }, 5000);
-}
-
-function handleSheetData(data) {
-  loading = false;
-  if (data && data.entries) {
-    entries = (data.entries || []).map(function(e) { return {...e, amount: Number(e.amount)}; });
-    incomes = (data.incomes || []).map(function(e) { return {...e, amount: Number(e.amount)}; });
-  }
-  render();
+    });
 }
 
 function useDemoData() {

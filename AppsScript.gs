@@ -99,7 +99,11 @@ function saveSheet(name, keys, rows) {
 }
 
 function json(obj) {
-  return ContentService
+  var output = ContentService
     .createTextOutput(JSON.stringify(obj))
     .setMimeType(ContentService.MimeType.JSON);
+  // Allow CORS from GitHub Pages
+  output.addHeader('Access-Control-Allow-Origin', '*');
+  output.addHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  return output;
 }
