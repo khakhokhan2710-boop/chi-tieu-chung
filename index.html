@@ -11,6 +11,10 @@
   --line: #e5e5e5; --red: #e7000b; --green: #0f8b5e;
   --font: 'Inter', system-ui, -apple-system, sans-serif;
 }
+[data-theme="dark"] {
+  --bg: #111111; --card: #1a1a1a; --ink: #e5e5e5; --gray: #888888;
+  --line: #2a2a2a; --red: #ff4444; --green: #4caf50;
+}
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:var(--font); background:var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased; padding-bottom:100px; }
 
@@ -21,7 +25,7 @@ body { font-family:var(--font); background:var(--bg); color:var(--ink); -webkit-
 .header-month { font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.8px; color:var(--gray); background:var(--bg); padding:3px 10px; border-radius:12px; }
 .header-meta { font-size:13px; color:var(--gray); display:flex; align-items:center; gap:8px; }
 .header-meta strong { color:var(--ink); font-weight:500; }
-.header-meta .dot { display:inline-block; }
+.theme-toggle { background:none; border:none; color:var(--gray); font-size:16px; cursor:pointer; padding:4px; line-height:1; }
 
 /* BALANCE */
 .balance { margin:16px 20px 0; background:var(--card); border-radius:20px; border:1px solid var(--line); padding:20px 24px; }
@@ -113,96 +117,100 @@ select.field-input { appearance:none; background-image:url("data:image/svg+xml,%
 <div class="header">
   <div class="header-row">
     <h1>Chi tiêu</h1>
-    <span class="header-month">07.2026</span>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="header-month">07.2026</span>
+      <button class="theme-toggle" id="themeBtn" onclick="toggleTheme()">🌙</button>
+    </div>
   </div>
   <div class="header-meta">
-    <span>Kha</span><span>·</span><span>Vy</span><span>·</span><span>40k/ngay</span>
+    <span>Kha</span> <span>·</span> <span>Vy</span> <span>·</span> <span>40k/ngày</span>
   </div>
 </div>
 
 <!-- BALANCE -->
 <div class="balance">
-  <div class="balance-label">Con lai trong thang</div>
+  <div class="balance-label">Còn lại trong tháng</div>
   <div class="balance-val" id="balVal">...</div>
   <div class="balance-row">
     <span><span class="person-dot dot-a"></span> Kha: <strong id="balKha">0</strong></span>
     <span><span class="person-dot dot-b"></span> Vy: <strong id="balVy">0</strong></span>
-    <span>Hom nay: <strong id="balToday">0</strong></span>
+    <span>Hôm nay: <strong id="balToday">0</strong></span>
   </div>
 </div>
 
 <!-- BUDGET -->
 <div class="budget-sec">
-  <div class="sec-label">Ngan sach thang</div>
+  <div class="sec-label">Ngân sách tháng</div>
   <div class="budget-grid">
     <div class="b-cell"><div class="lbl">Thu nhap</div><div class="val plus">10.500.000</div></div>
-    <div class="b-cell"><div class="lbl">Da chi</div><div class="val minus" id="bSpent">0</div></div>
-    <div class="b-cell"><div class="lbl">+ Thu nhap them</div><div class="val plus" id="bExtra">0</div></div>
-    <div class="b-cell"><div class="lbl">Gop xe</div><div class="val minus">-4.000.000</div></div>
-    <div class="b-cell span"><div class="lbl">Con lai</div><div class="val" id="bLeft">4.500.000</div></div>
+    <div class="b-cell"><div class="lbl">Đã chi</div><div class="val minus" id="bSpent">0</div></div>
+    <div class="b-cell"><div class="lbl" style="cursor:pointer;" onclick="addIncome()">+ Thu nhập thêm</div><div class="val plus" id="bExtra">0</div></div>
+    <div class="b-cell"><div class="lbl">Góp xe</div><div class="val minus">-4.000.000</div></div>
+    <div class="b-cell"><div class="lbl">Ba mẹ</div><div class="val minus">-2.000.000</div></div>
+    <div class="b-cell span"><div class="lbl">Còn lại</div><div class="val" id="bLeft">4.500.000</div></div>
   </div>
 </div>
 
 <!-- PROGRESS -->
 <div class="prog">
-  <div class="prog-top"><span>Tien do chi tieu</span><span id="pPct">0%</span></div>
+  <div class="prog-top"><span>Tiến độ chi tiêu</span><span id="pPct">0%</span></div>
   <div class="prog-bar"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
-  <div class="prog-sub"><span>Da chi: <strong id="pSpent">0</strong></span><span>Ngan sach: <strong>4.500.000</strong></span></div>
+  <div class="prog-sub"><span>Đã chi: <strong id="pSpent">0</strong></span><span>Ngân sách: <strong>4.500.000</strong></span></div>
 </div>
 
 <div class="prog">
-  <div class="prog-top"><span>Muc tieu an uong</span><span id="fTotal">0</span></div>
+  <div class="prog-top"><span>Mục tiêu ăn uống</span><span id="fTotal">0</span></div>
   <div class="food-bar"><div class="food-fill" id="fFill" style="width:0%"></div></div>
-  <div class="prog-sub"><span>Da chi: <strong id="fSpent">0</strong></span><span>Muc tieu: <strong>1.200.000</strong></span><span>Hom nay: <strong id="fToday">0</strong></span></div>
+  <div class="prog-sub"><span>Đã chi: <strong id="fSpent">0</strong></span><span>Mục tiêu: <strong>1.200.000</strong></span><span>Hôm nay: <strong id="fToday">0</strong></span></div>
 </div>
 
 <!-- ADD -->
 <div class="add-wrap">
-  <button class="btn-add" onclick="openForm()">Them chi tieu</button>
+  <button class="btn-add" onclick="openForm()">Thêm chi tiêu</button>
 </div>
 
 <!-- INCOME (hidden trigger) -->
 <div style="margin:8px 20px 0;text-align:right;font-size:12px;">
-  <span style="color:var(--gray);cursor:pointer;" onclick="addIncome()">+ Thu nhap them</span>
+  <span style="color:var(--gray);cursor:pointer;" onclick="addIncome()">+ Thêm thu nhập</span>
 </div>
 
 <!-- LIST -->
 <div class="list-header">
-  <h2>Gan day</h2>
+  <h2>Gần đây</h2>
   <div class="filter-group">
-    <button class="filter-chip active" data-f="all" onclick="setF('all')">Tat ca</button>
+    <button class="filter-chip active" data-f="all" onclick="setF('all')">Tất cả</button>
     <button class="filter-chip" data-f="kha" onclick="setF('kha')">Kha</button>
     <button class="filter-chip" data-f="vy" onclick="setF('vy')">Vy</button>
   </div>
 </div>
 
 <div class="entries" id="eList"></div>
-<div class="empty" id="eEmpty"><p>Chua co chi tieu nao</p></div>
+<div class="empty" id="eEmpty"><p>Chưa có chi tiêu nào</p></div>
 
 <!-- FORM -->
 <div class="overlay" id="overlay" onclick="closeForm(event)">
   <div class="sheet" onclick="event.stopPropagation()">
     <div class="sheet-h"></div>
-    <div class="sheet-title" id="fTitle">Them chi tieu</div>
-    <div class="field"><label>So tien</label><input type="number" class="field-input" id="fAmt" placeholder="0" inputmode="numeric"></div>
-    <div class="field"><label>Danh muc</label>
+    <div class="sheet-title" id="fTitle">Thêm chi tiêu</div>
+    <div class="field"><label>Số tiền</label><input type="number" class="field-input" id="fAmt" placeholder="0" inputmode="numeric"></div>
+    <div class="field"><label>Danh mục</label>
       <select class="field-input" id="fCat">
         <option value="an">An uong</option><option value="di_lai">Di chuyen</option>
         <option value="nha_cua">Nha cua</option><option value="mua_sam">Mua sam</option>
         <option value="giai_tri">Giai tri</option><option value="khac">Khac</option>
       </select>
     </div>
-    <div class="field"><label>Ngay</label><input type="date" class="field-input" id="fDate"></div>
-    <div class="field"><label>Nguoi chi</label>
+    <div class="field"><label>Ngày</label><input type="date" class="field-input" id="fDate"></div>
+    <div class="field"><label>Người chi</label>
       <div class="person-pick">
         <div class="person-opt a" data-p="kha" onclick="pickP('kha')">Kha</div>
         <div class="person-opt" data-p="vy" onclick="pickP('vy')">Vy</div>
       </div>
     </div>
-    <div class="field"><label>Ghi chu</label><input type="text" class="field-input" id="fNote" placeholder="(khong bat buoc)"></div>
+    <div class="field"><label>Ghi chú</label><input type="text" class="field-input" id="fNote" placeholder="(không bắt buộc)"></div>
     <div class="form-actions">
-      <button class="btn-ghost" onclick="closeForm()">Huy</button>
-      <button class="btn-primary" id="fBtn" onclick="submitEntry()">Them</button>
+      <button class="btn-ghost" onclick="closeForm()">Huỷ</button>
+      <button class="btn-primary" id="fBtn" onclick="submitEntry()">Thêm</button>
     </div>
   </div>
 </div>
@@ -373,6 +381,30 @@ function render() {
   document.getElementById('fSpent').textContent = fmt(food);
   document.getElementById('fToday').textContent = fmt(fT);
 }
+
+// ===== THEME =====
+function toggleTheme() {
+  var html = document.documentElement;
+  var btn = document.getElementById('themeBtn');
+  if (html.getAttribute('data-theme') === 'dark') {
+    html.removeAttribute('data-theme');
+    btn.textContent = '🌙';
+    localStorage.setItem('theme', 'light');
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    btn.textContent = '☀️';
+    localStorage.setItem('theme', 'dark');
+  }
+}
+
+// Restore theme
+(function() {
+  var t = localStorage.getItem('theme');
+  if (t === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('themeBtn').textContent = '☀️';
+  }
+})();
 
 // ===== TOAST =====
 function toast(m,e) { var w=document.getElementById('tWrap'); var t=document.createElement('div'); t.className='toast'; t.textContent=m; w.appendChild(t); setTimeout(function(){t.remove();},2000); }
