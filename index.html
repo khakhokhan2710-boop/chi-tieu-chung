@@ -6,614 +6,105 @@
 <title>Chi tiêu · 07.2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ===== shadcn/ui TOKENS ===== */
 :root {
-  --color-canvas: #f5f5f5;
-  --color-paper: #ffffff;
-  --color-surface-alt: #fafafa;
-  --color-ink: #0a0a0a;
-  --color-ink-soft: #171717;
-  --color-mid-gray: #737373;
-  --color-hairline: #e5e5e5;
-  --color-ember: #e7000b;
-
-  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-
-  --text-caption: 12px;
-  --text-body: 14px;
-  --text-body-lg: 16px;
-  --text-subheading: 18px;
-  --text-heading-sm: 24px;
-  --text-heading: 30px;
-  --text-heading-lg: 36px;
-
-  --spacing-4: 4px;
-  --spacing-8: 8px;
-  --spacing-12: 12px;
-  --spacing-16: 16px;
-  --spacing-20: 20px;
-  --spacing-24: 24px;
-  --spacing-48: 48px;
-
-  --radius-md: 6px;
-  --radius-lg: 10px;
-  --radius-xl: 14px;
-  --radius-2xl: 18px;
-  --radius-3xl: 24px;
-
-  --shadow-subtle: 0 0 0 1px rgba(23,23,23,0.05), 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px -1px rgba(0,0,0,0.1);
+  --bg: #f5f5f5; --card: #ffffff; --ink: #0a0a0a; --gray: #737373;
+  --line: #e5e5e5; --red: #e7000b; --green: #0f8b5e;
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
 }
-
 * { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  font-family: var(--font-sans);
-  font-size: var(--text-body);
-  color: var(--color-ink);
-  background: var(--color-canvas);
-  -webkit-font-smoothing: antialiased;
-  letter-spacing: -0.01em;
-  padding-bottom: 100px;
-}
-
-/* ===== HEADER ===== */
-.header {
-  background: var(--color-paper);
-  border-bottom: 1px solid var(--color-hairline);
-  padding: var(--spacing-20) var(--spacing-20) var(--spacing-16);
-  position: sticky; top:0; z-index:10;
-}
-
-.header-row {
-  display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--spacing-8);
-}
-
-.header h1 {
-  font-size: var(--text-subheading);
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  color: var(--color-ink);
-}
-
-.header-month {
-  font-size: var(--text-caption);
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-mid-gray);
-  background: var(--color-canvas);
-  padding: 2px 10px;
-  border-radius: var(--radius-2xl);
-}
-
-.header-meta {
-  font-size: var(--text-caption);
-  color: var(--color-mid-gray);
-  letter-spacing: 0.02em;
-  display: flex; align-items: center; gap: var(--spacing-12);
-}
-
-.header-meta .sep { color: var(--color-hairline); }
-.header-meta strong { color: var(--color-ink); font-weight: 500; }
-
-/* ===== BALANCE CARD ===== */
-.balance {
-  margin: var(--spacing-16) var(--spacing-20) 0;
-  background: var(--color-paper);
-  border-radius: var(--radius-3xl);
-  border: 1px solid var(--color-hairline);
-  box-shadow: var(--shadow-subtle);
-  padding: var(--spacing-24);
-}
-
-.balance-label {
-  font-size: var(--text-caption);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-mid-gray);
-  font-weight: 500;
-  margin-bottom: var(--spacing-4);
-}
-
-.balance-value {
-  font-size: var(--text-heading-lg);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-  margin-bottom: var(--spacing-16);
-}
-
-.balance-value.negative { color: var(--color-ember); }
-
-.balance-detail {
-  display: flex; gap: var(--spacing-24); font-size: var(--text-body);
-  color: var(--color-mid-gray);
-}
-
-.balance-detail .person {
-  display: flex; align-items: center; gap: var(--spacing-8);
-}
-
-.person-dot {
-  width: 8px; height: 8px; border-radius: 50%;
-}
-
-.person-dot.a { background: var(--color-ink); }
-.person-dot.b { background: var(--color-ember); }
-
-/* ===== BUDGET GRID ===== */
-.budget-section {
-  margin: var(--spacing-16) var(--spacing-20) 0;
-}
-
-.section-label {
-  font-size: var(--text-caption);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-mid-gray);
-  font-weight: 500;
-  margin-bottom: var(--spacing-12);
-}
-
-.budget-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--spacing-8);
-}
-
-.budget-cell {
-  background: var(--color-paper);
-  border-radius: var(--radius-2xl);
-  border: 1px solid var(--color-hairline);
-  padding: var(--spacing-12) var(--spacing-16);
-}
-
-.budget-cell.span { grid-column: 1 / -1; }
-
-.budget-cell .lbl {
-  font-size: var(--text-caption);
-  color: var(--color-mid-gray);
-  font-weight: 500;
-  margin-bottom: 2px;
-}
-
-.budget-cell .val {
-  font-size: var(--text-body-lg);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
-.budget-cell .val.plus { color: var(--color-ink); }
-.budget-cell .val.minus { color: var(--color-ember); }
-.budget-cell .val.remain { color: var(--color-ink); font-size: 20px; font-weight: 700; letter-spacing: -0.03em; }
-
-/* ===== PROGRESS ===== */
-.progress-card {
-  margin: var(--spacing-12) var(--spacing-20) 0;
-  background: var(--color-paper);
-  border-radius: var(--radius-2xl);
-  border: 1px solid var(--color-hairline);
-  padding: var(--spacing-16) var(--spacing-20);
-}
-
-.progress-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: var(--spacing-8);
-}
-
-.progress-header .label {
-  font-size: var(--text-caption);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-mid-gray);
-  font-weight: 500;
-}
-
-.progress-header .pct {
-  font-size: var(--text-body);
-  font-weight: 600;
-}
-
-.progress-track {
-  height: 6px;
-  background: var(--color-canvas);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.progress-fill {
-  height: 100%;
-  border-radius: 3px;
-  background: var(--color-ink-soft);
-  transition: width 0.4s ease;
-}
-
-.progress-fill.danger { background: var(--color-ember); }
-.progress-fill.caution { background: var(--color-ink-soft); }
-
-.progress-info {
-  display: flex; justify-content: space-between;
-  font-size: var(--text-caption);
-  color: var(--color-mid-gray);
-  margin-top: var(--spacing-4);
-}
-
-/* ===== FOOD GOAL ===== */
-.food-card {
-  margin: var(--spacing-12) var(--spacing-20) 0;
-  background: var(--color-paper);
-  border-radius: var(--radius-2xl);
-  border: 1px solid var(--color-hairline);
-  padding: var(--spacing-16) var(--spacing-20);
-}
-
-.food-header {
-  display: flex; justify-content: space-between; align-items: center;
-  margin-bottom: var(--spacing-8);
-}
-
-.food-header .label {
-  font-size: var(--text-caption);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-mid-gray);
-  font-weight: 500;
-}
-
-.food-header .value {
-  font-size: var(--text-body-lg);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
-.food-bar {
-  height: 6px;
-  background: var(--color-canvas);
-  border-radius: 3px;
-  overflow: hidden;
-  margin-bottom: var(--spacing-8);
-}
-
-.food-fill {
-  height: 100%;
-  border-radius: 3px;
-  background: var(--color-ink-soft);
-  transition: width 0.4s ease;
-}
-
-.food-fill.over { background: var(--color-ember); }
-
-.food-meta {
-  display: flex; gap: var(--spacing-20);
-  font-size: var(--text-caption);
-  color: var(--color-mid-gray);
-}
-
-/* ===== ADD BUTTON ===== */
-.add-wrap {
-  margin: var(--spacing-16) var(--spacing-20) 0;
-}
-
-.btn-add {
-  width: 100%;
-  background: var(--color-ink);
-  color: #fafafa;
-  border: none;
-  border-radius: var(--radius-2xl);
-  padding: 14px;
-  font-family: var(--font-sans);
-  font-size: var(--text-body);
-  font-weight: 500;
-  cursor: pointer;
-  transition: opacity 0.15s;
-  box-shadow: var(--shadow-subtle);
-}
-
-.btn-add:hover { opacity: 0.85; }
-.btn-add:active { opacity: 0.7; }
-
-/* ===== ENTRIES ===== */
-.list-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin: var(--spacing-24) var(--spacing-20) var(--spacing-12);
-}
-
-.list-header h2 {
-  font-size: var(--text-body-lg);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
-.filter-group {
-  display: flex; gap: var(--spacing-4);
-}
-
-.filter-chip {
-  font-size: var(--text-caption);
-  font-weight: 500;
-  padding: 4px 12px;
-  border: 1px solid var(--color-hairline);
-  border-radius: var(--radius-2xl);
-  background: var(--color-paper);
-  color: var(--color-mid-gray);
-  cursor: pointer;
-  font-family: var(--font-sans);
-  transition: all 0.12s;
-}
-
-.filter-chip.active {
-  background: var(--color-ink);
-  color: #fafafa;
-  border-color: var(--color-ink);
-}
-
-.entries {
-  display: flex; flex-direction: column; gap: var(--spacing-8);
-  margin: 0 var(--spacing-20);
-}
-
-.entry {
-  background: var(--color-paper);
-  border-radius: var(--radius-2xl);
-  border: 1px solid var(--color-hairline);
-  box-shadow: var(--shadow-subtle);
-  padding: var(--spacing-12) var(--spacing-16);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-12);
-}
-
-.entry-avatar {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 600; text-transform: uppercase;
-  color: #fafafa;
-  flex-shrink: 0;
-}
-
-.entry-avatar.kha { background: var(--color-ink); }
-.entry-avatar.vy { background: var(--color-ember); }
-
-.entry-body {
-  flex: 1; min-width: 0;
-}
-
-.entry-top {
-  display: flex; align-items: center; gap: var(--spacing-8);
-  margin-bottom: 2px;
-}
-
-.entry-name {
-  font-size: var(--text-body);
-  font-weight: 500;
-}
-
-.entry-tag {
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--color-mid-gray);
-  background: var(--color-canvas);
-  padding: 1px 8px;
-  border-radius: var(--radius-2xl);
-}
-
-.entry-note {
-  font-size: var(--text-caption);
-  color: var(--color-mid-gray);
-}
-
-.entry-side {
-  text-align: right;
-  flex-shrink: 0;
-}
-
-.entry-amount {
-  font-size: var(--text-body-lg);
-  font-weight: 600;
-  letter-spacing: -0.02em;
-}
-
-.entry-date {
-  font-size: 11px;
-  color: var(--color-mid-gray);
-}
-
-.entry-actions {
-  display: flex; gap: 2px; margin-left: var(--spacing-8);
-}
-
-.entry-btn {
-  background: none; border: none;
-  color: var(--color-hairline);
-  font-size: 16px; cursor: pointer;
-  padding: 2px 4px; line-height: 1;
-  transition: color 0.12s;
-}
-
-.entry-btn:hover { color: var(--color-ink); }
-.entry-btn.del:hover { color: var(--color-ember); }
-
-/* ===== EMPTY ===== */
-.empty {
-  text-align: center;
-  padding: var(--spacing-48) var(--spacing-20);
-  color: var(--color-mid-gray);
-}
-
-.empty p { font-size: var(--text-body); }
-
-/* ===== FORM OVERLAY ===== */
-.overlay {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,0.25);
-  z-index: 100;
-  align-items: flex-end; justify-content: center;
-}
-
-.overlay.active { display: flex; }
-
-.sheet {
-  background: var(--color-paper);
-  width: 100%; max-width: 440px;
-  border-radius: var(--radius-3xl) var(--radius-3xl) 0 0;
-  padding: var(--spacing-20) var(--spacing-20) var(--spacing-32);
-  animation: slideUp 0.25s ease;
-}
-
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-.sheet-handle {
-  width: 32px; height: 4px;
-  background: var(--color-hairline);
-  border-radius: 2px;
-  margin: 0 auto var(--spacing-20);
-}
-
-.sheet-title {
-  font-size: var(--text-subheading);
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  margin-bottom: var(--spacing-20);
-}
-
-.field {
-  margin-bottom: var(--spacing-16);
-}
-
-.field label {
-  display: block;
-  font-size: var(--text-caption);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--color-mid-gray);
-  font-weight: 500;
-  margin-bottom: var(--spacing-4);
-}
-
-.field-input {
-  width: 100%;
-  background: var(--color-canvas);
-  border: none;
-  border-radius: var(--radius-2xl);
-  padding: 10px 14px;
-  font-family: var(--font-sans);
-  font-size: var(--text-body);
-  font-weight: 400;
-  color: var(--color-ink);
-  outline: none;
-}
-
-.field-input:focus { box-shadow: inset 0 0 0 1.5px var(--color-hairline); }
-
-select.field-input {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23737373' stroke-width='1.5'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  padding-right: 36px;
-  cursor: pointer;
-}
-
-.person-select {
-  display: flex; gap: var(--spacing-8);
-}
-
-.person-opt {
-  flex: 1;
-  padding: 10px;
-  border: 1.5px solid var(--color-hairline);
-  border-radius: var(--radius-2xl);
-  text-align: center;
-  font-family: var(--font-sans);
-  font-size: var(--text-body);
-  font-weight: 500;
-  cursor: pointer;
-  background: var(--color-paper);
-  color: var(--color-mid-gray);
-  transition: all 0.12s;
-}
-
-.person-opt.active-a {
-  border-color: var(--color-ink);
-  background: #f8f8f8;
-  color: var(--color-ink);
-}
-
-.person-opt.active-b {
-  border-color: var(--color-ember);
-  background: #fff5f5;
-  color: var(--color-ember);
-}
-
-.form-actions {
-  display: flex; gap: var(--spacing-8);
-  margin-top: var(--spacing-12);
-}
-
-.btn-primary {
-  flex: 1;
-  background: var(--color-ink);
-  color: #fafafa;
-  border: none;
-  border-radius: var(--radius-2xl);
-  padding: 12px;
-  font-family: var(--font-sans);
-  font-size: var(--text-body);
-  font-weight: 500;
-  cursor: pointer;
-}
-
-.btn-ghost {
-  background: var(--color-canvas);
-  color: var(--color-ink);
-  border: none;
-  border-radius: var(--radius-2xl);
-  padding: 12px 20px;
-  font-family: var(--font-sans);
-  font-size: var(--text-body);
-  font-weight: 500;
-  cursor: pointer;
-}
-
-/* ===== TOAST ===== */
-.toast-wrap {
-  position: fixed;
-  bottom: 80px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 200;
-  display: flex; flex-direction: column;
-  align-items: center; gap: var(--spacing-8);
-  pointer-events: none;
-}
-
-.toast {
-  background: var(--color-ink-soft);
-  color: #fafafa;
-  font-size: var(--text-body);
-  padding: 10px 20px;
-  border-radius: var(--radius-2xl);
-  animation: fadeUp 0.2s ease;
-  pointer-events: auto;
-}
-
-.toast.error { background: var(--color-ember); }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ===== RESPONSIVE ===== */
-@media (max-width: 400px) {
-  .budget-grid { grid-template-columns: 1fr; }
-  .balance-value { font-size: 28px; }
-}
+body { font-family:var(--font); background:var(--bg); color:var(--ink); -webkit-font-smoothing:antialiased; padding-bottom:100px; }
+
+/* HEADER */
+.header { background:var(--card); border-bottom:1px solid var(--line); padding:20px 20px 14px; position:sticky; top:0; z-index:10; }
+.header-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+.header h1 { font-size:18px; font-weight:600; letter-spacing:-0.3px; }
+.header-month { font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.8px; color:var(--gray); background:var(--bg); padding:3px 10px; border-radius:12px; }
+.header-meta { font-size:13px; color:var(--gray); display:flex; align-items:center; gap:8px; }
+.header-meta strong { color:var(--ink); font-weight:500; }
+.header-meta .dot { display:inline-block; }
+
+/* BALANCE */
+.balance { margin:16px 20px 0; background:var(--card); border-radius:20px; border:1px solid var(--line); padding:20px 24px; }
+.balance-label { font-size:11px; text-transform:uppercase; letter-spacing:0.8px; color:var(--gray); font-weight:500; margin-bottom:4px; }
+.balance-val { font-size:36px; font-weight:700; letter-spacing:-1.5px; line-height:1; margin-bottom:12px; }
+.balance-val.neg { color:var(--red); }
+.balance-row { display:flex; gap:20px; font-size:13px; color:var(--gray); }
+.person-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+.dot-a { background:var(--ink); } .dot-b { background:var(--red); }
+
+/* BUDGET */
+.budget-sec { margin:12px 20px 0; }
+.sec-label { font-size:11px; text-transform:uppercase; letter-spacing:0.8px; color:var(--gray); font-weight:500; margin-bottom:8px; }
+.budget-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.b-cell { background:var(--card); border-radius:14px; border:1px solid var(--line); padding:10px 14px; }
+.b-cell.span { grid-column:1/-1; }
+.b-cell .lbl { font-size:11px; color:var(--gray); font-weight:500; }
+.b-cell .val { font-size:17px; font-weight:600; letter-spacing:-0.3px; }
+.b-cell .val.plus { color:var(--ink); }
+.b-cell .val.minus { color:var(--red); }
+
+/* PROGRESS */
+.prog { margin:8px 20px 0; background:var(--card); border-radius:14px; border:1px solid var(--line); padding:14px 16px; }
+.prog-top { display:flex; justify-content:space-between; font-size:11px; color:var(--gray); margin-bottom:6px; }
+.prog-bar { height:6px; background:var(--bg); border-radius:3px; overflow:hidden; margin-bottom:4px; }
+.prog-fill { height:100%; border-radius:3px; background:var(--ink); transition:width .3s; }
+.prog-fill.danger { background:var(--red); }
+.prog-sub { display:flex; justify-content:space-between; font-size:11px; color:var(--gray); }
+.food-bar { height:6px; background:var(--bg); border-radius:3px; overflow:hidden; margin:6px 0 4px; }
+.food-fill { height:100%; border-radius:3px; background:var(--green); transition:width .3s; }
+.food-fill.over { background:var(--red); }
+
+/* ADD */
+.add-wrap { margin:16px 20px 0; }
+.btn-add { width:100%; background:var(--ink); color:#fafafa; border:none; border-radius:16px; padding:14px; font-family:var(--font); font-size:15px; font-weight:600; cursor:pointer; }
+
+/* LIST */
+.list-header { display:flex; align-items:center; justify-content:space-between; margin:20px 20px 10px; }
+.list-header h2 { font-size:15px; font-weight:600; }
+.filter-group { display:flex; gap:4px; }
+.filter-chip { font-size:11px; font-weight:500; padding:4px 12px; border:1px solid var(--line); border-radius:14px; background:var(--card); color:var(--gray); cursor:pointer; font-family:var(--font); }
+.filter-chip.active { background:var(--ink); color:#fafafa; border-color:var(--ink); }
+
+.entries { display:flex; flex-direction:column; gap:8px; margin:0 20px; }
+.entry { background:var(--card); border-radius:16px; border:1px solid var(--line); padding:12px 14px; display:flex; align-items:center; gap:12px; }
+.entry-av { width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; color:#fafafa; flex-shrink:0; }
+.entry-av.kha { background:var(--ink); } .entry-av.vy { background:var(--red); }
+.entry-bd { flex:1; min-width:0; }
+.entry-top { display:flex; align-items:center; gap:6px; margin-bottom:2px; }
+.entry-name { font-size:14px; font-weight:500; }
+.entry-tag { font-size:11px; color:var(--gray); background:var(--bg); padding:1px 8px; border-radius:10px; }
+.entry-note { font-size:12px; color:var(--gray); }
+.entry-side { text-align:right; flex-shrink:0; }
+.entry-amt { font-size:16px; font-weight:600; letter-spacing:-0.3px; }
+.entry-date { font-size:11px; color:var(--gray); }
+.entry-btn { background:none; border:none; color:var(--line); font-size:16px; cursor:pointer; padding:2px 4px; }
+.entry-btn:hover { color:var(--ink); }
+.entry-btn.del:hover { color:var(--red); }
+.empty { text-align:center; padding:40px 20px; color:var(--gray); }
+.empty p { font-size:15px; }
+
+/* FORM */
+.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.25); z-index:100; align-items:flex-end; justify-content:center; }
+.overlay.active { display:flex; }
+.sheet { background:var(--card); width:100%; max-width:440px; border-radius:24px 24px 0 0; padding:20px 20px 32px; animation:slideUp .25s ease; }
+@keyframes slideUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+.sheet-h { width:32px; height:4px; background:var(--line); border-radius:2px; margin:0 auto 16px; }
+.sheet-title { font-size:17px; font-weight:600; margin-bottom:16px; }
+.field { margin-bottom:14px; }
+.field label { display:block; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; color:var(--gray); font-weight:500; margin-bottom:4px; }
+.field-input { width:100%; background:var(--bg); border:none; border-radius:14px; padding:10px 14px; font-family:var(--font); font-size:14px; outline:none; color:var(--ink); }
+.field-input:focus { box-shadow:inset 0 0 0 1.5px var(--line); }
+select.field-input { appearance:none; background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23737373' stroke-width='1.5'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 14px center; padding-right:36px; cursor:pointer; }
+.person-pick { display:flex; gap:8px; }
+.person-opt { flex:1; padding:10px; border:1.5px solid var(--line); border-radius:14px; text-align:center; font-family:var(--font); font-size:14px; font-weight:500; cursor:pointer; background:var(--card); color:var(--gray); }
+.person-opt.a { border-color:var(--ink); background:#f8f8f8; color:var(--ink); }
+.person-opt.b { border-color:var(--red); background:#fff5f5; color:var(--red); }
+.form-actions { display:flex; gap:8px; margin-top:8px; }
+.btn-primary { flex:1; background:var(--ink); color:#fafafa; border:none; border-radius:14px; padding:12px; font-family:var(--font); font-size:14px; font-weight:500; cursor:pointer; }
+.btn-ghost { background:var(--bg); color:var(--ink); border:none; border-radius:14px; padding:12px 20px; font-family:var(--font); font-size:14px; font-weight:500; cursor:pointer; }
+.toast-wrap { position:fixed; bottom:80px; left:50%; transform:translateX(-50%); z-index:200; pointer-events:none; }
+.toast { background:var(--ink); color:#fafafa; font-size:13px; padding:10px 18px; border-radius:14px; animation:fadeUp .2s ease; pointer-events:auto; margin-bottom:6px; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
 </style>
 </head>
 <body>
@@ -625,444 +116,266 @@ select.field-input {
     <span class="header-month">07.2026</span>
   </div>
   <div class="header-meta">
-    <span>Kha</span>
-    <span class="sep">·</span>
-    <span>Vy</span>
-    <span class="sep">·</span>
-    <span>Mục tiêu 40k/ngày</span>
+    <span>Kha</span><span>·</span><span>Vy</span><span>·</span><span>40k/ngay</span>
   </div>
 </div>
 
 <!-- BALANCE -->
 <div class="balance">
-  <div class="balance-label">Còn lại trong tháng</div>
-  <div class="balance-value" id="balVal">4.500.000</div>
-  <div class="balance-detail">
-    <div class="person"><span class="person-dot a"></span> Kha: <strong id="balKha">0</strong></div>
-    <div class="person"><span class="person-dot b"></span> Vy: <strong id="balVy">0</strong></div>
-    <div class="person">Hôm nay: <strong id="balToday">0</strong></div>
+  <div class="balance-label">Con lai trong thang</div>
+  <div class="balance-val" id="balVal">...</div>
+  <div class="balance-row">
+    <span><span class="person-dot dot-a"></span> Kha: <strong id="balKha">0</strong></span>
+    <span><span class="person-dot dot-b"></span> Vy: <strong id="balVy">0</strong></span>
+    <span>Hom nay: <strong id="balToday">0</strong></span>
   </div>
 </div>
 
 <!-- BUDGET -->
-<div class="budget-section">
-  <div class="section-label">Ngân sách tháng</div>
+<div class="budget-sec">
+  <div class="sec-label">Ngan sach thang</div>
   <div class="budget-grid">
-    <div class="budget-cell">
-      <div class="lbl">Thu nhập</div>
-      <div class="val plus">10.500.000</div>
-    </div>
-    <div class="budget-cell">
-      <div class="lbl">Đã chi</div>
-      <div class="val minus" id="budSpent">0</div>
-    </div>
-    <div class="budget-cell">
-      <div class="lbl" style="cursor:pointer;" onclick="addIncome()">+ Thu nhập thêm</div>
-      <div class="val plus" id="budExtra">0</div>
-    </div>
-    <div class="budget-cell">
-      <div class="lbl">Góp xe</div>
-      <div class="val minus">-4.000.000</div>
-    </div>
-    <div class="budget-cell">
-      <div class="lbl">Ba mẹ</div>
-      <div class="val minus">-2.000.000</div>
-    </div>
-    <div class="budget-cell span">
-      <div class="lbl">Còn lại</div>
-      <div class="val remain" id="budRemain">4.500.000</div>
-    </div>
+    <div class="b-cell"><div class="lbl">Thu nhap</div><div class="val plus">10.500.000</div></div>
+    <div class="b-cell"><div class="lbl">Da chi</div><div class="val minus" id="bSpent">0</div></div>
+    <div class="b-cell"><div class="lbl">+ Thu nhap them</div><div class="val plus" id="bExtra">0</div></div>
+    <div class="b-cell"><div class="lbl">Gop xe</div><div class="val minus">-4.000.000</div></div>
+    <div class="b-cell span"><div class="lbl">Con lai</div><div class="val" id="bLeft">4.500.000</div></div>
   </div>
 </div>
 
 <!-- PROGRESS -->
-<div class="progress-card">
-  <div class="progress-header">
-    <span class="label">Tiến độ chi tiêu</span>
-    <span class="pct" id="progPct">0%</span>
-  </div>
-  <div class="progress-track">
-    <div class="progress-fill" id="progFill" style="width:0%"></div>
-  </div>
-  <div class="progress-info">
-    <span>Đã chi: <strong id="progSpent">0</strong></span>
-    <span>Ngân sách: <strong>4.500.000</strong></span>
-  </div>
+<div class="prog">
+  <div class="prog-top"><span>Tien do chi tieu</span><span id="pPct">0%</span></div>
+  <div class="prog-bar"><div class="prog-fill" id="pFill" style="width:0%"></div></div>
+  <div class="prog-sub"><span>Da chi: <strong id="pSpent">0</strong></span><span>Ngan sach: <strong>4.500.000</strong></span></div>
 </div>
 
-<!-- FOOD GOAL -->
-<div class="food-card">
-  <div class="food-header">
-    <span class="label">Mục tiêu ăn uống</span>
-    <span class="value" id="foodTotal">0</span>
-  </div>
-  <div class="food-bar">
-    <div class="food-fill" id="foodFill" style="width:0%"></div>
-  </div>
-  <div class="food-meta">
-    <span>Đã chi: <strong id="foodSpent">0</strong></span>
-    <span>Mục tiêu: <strong>1.200.000</strong></span>
-    <span>Hôm nay: <strong id="foodToday">0</strong></span>
-  </div>
+<div class="prog">
+  <div class="prog-top"><span>Muc tieu an uong</span><span id="fTotal">0</span></div>
+  <div class="food-bar"><div class="food-fill" id="fFill" style="width:0%"></div></div>
+  <div class="prog-sub"><span>Da chi: <strong id="fSpent">0</strong></span><span>Muc tieu: <strong>1.200.000</strong></span><span>Hom nay: <strong id="fToday">0</strong></span></div>
 </div>
 
-<!-- ADD BUTTON -->
+<!-- ADD -->
 <div class="add-wrap">
   <button class="btn-add" onclick="openForm()">Them chi tieu</button>
 </div>
 
-<!-- ENTRIES HEADER -->
+<!-- INCOME (hidden trigger) -->
+<div style="margin:8px 20px 0;text-align:right;font-size:12px;">
+  <span style="color:var(--gray);cursor:pointer;" onclick="addIncome()">+ Thu nhap them</span>
+</div>
+
+<!-- LIST -->
 <div class="list-header">
   <h2>Gan day</h2>
   <div class="filter-group">
-    <button class="filter-chip active" data-f="all" onclick="setFilter('all')">Tat ca</button>
-    <button class="filter-chip" data-f="kha" onclick="setFilter('kha')">Kha</button>
-    <button class="filter-chip" data-f="vy" onclick="setFilter('vy')">Vy</button>
+    <button class="filter-chip active" data-f="all" onclick="setF('all')">Tat ca</button>
+    <button class="filter-chip" data-f="kha" onclick="setF('kha')">Kha</button>
+    <button class="filter-chip" data-f="vy" onclick="setF('vy')">Vy</button>
   </div>
 </div>
 
-<!-- ENTRIES -->
-<div class="entries" id="entriesList"></div>
-<div class="empty" id="emptyState">
-  <p>Chua co chi tieu nao</p>
-</div>
+<div class="entries" id="eList"></div>
+<div class="empty" id="eEmpty"><p>Chua co chi tieu nao</p></div>
 
-<!-- FORM OVERLAY -->
+<!-- FORM -->
 <div class="overlay" id="overlay" onclick="closeForm(event)">
   <div class="sheet" onclick="event.stopPropagation()">
-    <div class="sheet-handle"></div>
-    <div class="sheet-title" id="formTitle">Them chi tieu</div>
-
-    <div class="field">
-      <label>So tien</label>
-      <input type="number" class="field-input" id="fAmt" placeholder="0" min="0" inputmode="numeric">
-    </div>
-
-    <div class="field">
-      <label>Danh muc</label>
+    <div class="sheet-h"></div>
+    <div class="sheet-title" id="fTitle">Them chi tieu</div>
+    <div class="field"><label>So tien</label><input type="number" class="field-input" id="fAmt" placeholder="0" inputmode="numeric"></div>
+    <div class="field"><label>Danh muc</label>
       <select class="field-input" id="fCat">
-        <option value="an">An uong</option>
-        <option value="di_lai">Di chuyen</option>
-        <option value="nha_cua">Nha cua</option>
-        <option value="mua_sam">Mua sam</option>
-        <option value="giai_tri">Giai tri</option>
-        <option value="khac">Khac</option>
+        <option value="an">An uong</option><option value="di_lai">Di chuyen</option>
+        <option value="nha_cua">Nha cua</option><option value="mua_sam">Mua sam</option>
+        <option value="giai_tri">Giai tri</option><option value="khac">Khac</option>
       </select>
     </div>
-
-    <div class="field" id="fDateField">
-      <label>Ngay</label>
-      <input type="date" class="field-input" id="fDate">
-    </div>
-
-    <div class="field">
-      <label>Nguoi chi</label>
-      <div class="person-select">
-        <div class="person-opt active-a" data-p="kha" onclick="pickPerson('kha')">Kha</div>
-        <div class="person-opt" data-p="vy" onclick="pickPerson('vy')">Vy</div>
+    <div class="field"><label>Ngay</label><input type="date" class="field-input" id="fDate"></div>
+    <div class="field"><label>Nguoi chi</label>
+      <div class="person-pick">
+        <div class="person-opt a" data-p="kha" onclick="pickP('kha')">Kha</div>
+        <div class="person-opt" data-p="vy" onclick="pickP('vy')">Vy</div>
       </div>
     </div>
-
-    <div class="field">
-      <label>Ghi chu</label>
-      <input type="text" class="field-input" id="fNote" placeholder="(khong bat buoc)">
-    </div>
-
+    <div class="field"><label>Ghi chu</label><input type="text" class="field-input" id="fNote" placeholder="(khong bat buoc)"></div>
     <div class="form-actions">
       <button class="btn-ghost" onclick="closeForm()">Huy</button>
-      <button class="btn-primary" id="fSubmitBtn" onclick="submitEntry()">Them</button>
+      <button class="btn-primary" id="fBtn" onclick="submitEntry()">Them</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast-wrap" id="toastWrap"></div>
+<div class="toast-wrap" id="tWrap"></div>
 
+<script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/12.15.0/firebase-database-compat.js"></script>
 <script>
-// === GOOGLE SHEET ===
-// SAU KHI DEPLOY APPS SCRIPT, DAN URL VAO DAY
-const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxj0FZ1XPjk0kKLjY0actCi4rVYD5DcCpP6NvG8Z2ifBLIU9P4ZCjKsW4p2Yv3UPnZQ/exec';
+// ===== FIREBASE =====
+firebase.initializeApp({
+  apiKey: "AIzaSyDvfxDa6wuUeUetNscuWow616uC813HH6E",
+  authDomain: "quan-ly-chi-tieu-kha.firebaseapp.com",
+  databaseURL: "https://quan-ly-chi-tieu-kha-default-rtdb.firebaseio.com/",
+  projectId: "quan-ly-chi-tieu-kha",
+  storageBucket: "quan-ly-chi-tieu-kha.firebasestorage.app",
+  messagingSenderId: "955132539788",
+  appId: "1:955132539788:web:3be04b8495dd7d2fe45ca9"
+});
+var db = firebase.database();
+var ref = db.ref('chitieu');
 
-// === DATA ===
-const CATS = { an:'An uong', di_lai:'Di chuyen', nha_cua:'Nha cua', mua_sam:'Mua sam', giai_tri:'Giai tri', khac:'Khac' };
-let entries = [], incomes = [], myFilter = 'all', selPerson = 'kha', editIdx = -1;
-let loading = false;
+// ===== DATA =====
+var CATS = { an:'An uong', di_lai:'Di chuyen', nha_cua:'Nha cua', mua_sam:'Mua sam', giai_tri:'Giai tri', khac:'Khac' };
+var entries = [], incomes = [], myF = 'all', selP = 'kha', editIdx = -1;
+var BUDGET = 4500000, FOOD_GOAL = 1200000;
+var demoLoaded = false;
 
-const INCOME = 10500000, CAR = 4000000, PARENTS = 2000000, BUDGET = INCOME - CAR - PARENTS;
-const FOOD_GOAL = 1200000, DAILY_FOOD = 40000;
+function fmt(n) { return new Intl.NumberFormat('vi-VN').format(n); }
+function today() { var d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function shD(s) { var a=s.split('-'); return a[2]+'/'+a[1]; }
+function isT(s) { return s===today(); }
 
-function fmt(n) {
-  return new Intl.NumberFormat('vi-VN').format(n);
-}
-
-function today() {
-  const d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
-}
-
-function shortD(s) {
-  const [y,m,d] = s.split('-');
-  return d + '/' + m;
-}
-
-function isToday(s) { return s === today(); }
-
-// === FORM ===
-function openForm(data) {
-  document.getElementById('overlay').classList.add('active');
-  document.getElementById('fDateField').style.display = 'block';
-
+// ===== FIREBASE: SYNC =====
+ref.on('value', function(snap) {
+  var data = snap.val();
   if (data) {
-    editIdx = data.idx;
-    document.getElementById('fAmt').value = data.amount;
-    document.getElementById('fCat').value = data.category;
-    document.getElementById('fDate').value = data.date;
-    document.getElementById('fNote').value = data.note || '';
-    document.getElementById('fSubmitBtn').textContent = 'Luu';
-    document.getElementById('fSubmitBtn').style.background = 'var(--color-ink-soft)';
-    document.getElementById('formTitle').textContent = 'Sua chi tieu';
-    selPerson = data.person;
-    document.querySelectorAll('.person-opt').forEach(el => {
-      el.className = 'person-opt';
-      if (el.dataset.p === selPerson) el.classList.add(selPerson === 'kha' ? 'active-a' : 'active-b');
-    });
-  } else {
-    editIdx = -1;
-    document.getElementById('fAmt').value = '';
-    document.getElementById('fCat').value = 'an';
-    document.getElementById('fDate').value = today();
-    document.getElementById('fNote').value = '';
-    document.getElementById('fSubmitBtn').textContent = 'Them';
-    document.getElementById('fSubmitBtn').style.background = '';
-    document.getElementById('formTitle').textContent = 'Them chi tieu';
-    selPerson = 'kha';
-    document.querySelectorAll('.person-opt').forEach(el => {
-      el.className = 'person-opt';
-      if (el.dataset.p === 'kha') el.classList.add('active-a');
-    });
+    entries = data.entries || [];
+    incomes = data.incomes || [];
+    demoLoaded = true;
+  } else if (!demoLoaded) {
+    useDemo();
   }
-  setTimeout(() => document.getElementById('fAmt').focus(), 300);
-}
+  render();
+}, function() {
+  if (!demoLoaded) useDemo();
+});
 
-function editEntry(idx) {
-  const e = entries[idx];
-  openForm({ idx, amount: e.amount, category: e.category, date: e.date, person: e.person, note: e.note });
-}
-
-function closeForm(e) {
-  if (e && e.target !== e.currentTarget) return;
-  document.getElementById('overlay').classList.remove('active');
-}
-
-function pickPerson(p) {
-  selPerson = p;
-  document.querySelectorAll('.person-opt').forEach(el => {
-    el.className = 'person-opt';
-    if (el.dataset.p === p) el.classList.add(p === 'kha' ? 'active-a' : 'active-b');
-  });
-}
-
-function setFilter(f) {
-  myFilter = f;
-  document.querySelectorAll('.filter-chip').forEach(el => el.classList.toggle('active', el.dataset.f === f));
+function useDemo() {
+  entries = [
+    {date:'2026-07-05',category:'an',amount:35000,person:'kha',note:'An sang + cf'},
+    {date:'2026-07-05',category:'an',amount:42000,person:'vy',note:'An toi'},
+    {date:'2026-07-06',category:'di_lai',amount:20000,person:'kha',note:'Xe om'},
+    {date:'2026-07-06',category:'an',amount:15000,person:'kha',note:'Banh my'},
+    {date:'2026-07-06',category:'mua_sam',amount:120000,person:'vy',note:'My pham'},
+    {date:'2026-07-07',category:'an',amount:28000,person:'kha',note:'Com trua'},
+    {date:'2026-07-07',category:'an',amount:55000,person:'vy',note:'An vat'},
+    {date:'2026-07-07',category:'giai_tri',amount:45000,person:'kha',note:'Net'},
+  ];
+  incomes = [{date:'2026-07-05',amount:500000,note:'Lam them'}];
+  demoLoaded = true;
+  sync();
   render();
 }
 
-// === SAVE / LOAD (JSONP) ===
-var loadAttempts = 0;
-var scriptTag = null;
-
-function jsonp(url, cb) {
-  var callbackName = 'jsonp_' + Date.now();
-  window[callbackName] = function(data) { delete window[callbackName]; cb(data); };
-  var s = document.createElement('script');
-  s.src = url + (url.indexOf('?') > -1 ? '&' : '?') + 'callback=' + callbackName;
-  document.head.appendChild(s);
-  setTimeout(function() { if (window[callbackName]) { delete window[callbackName]; cb(null); } }, 8000);
+function sync() {
+  ref.set({ entries: entries, incomes: incomes });
 }
 
-function save() {
-  var data = JSON.stringify({ entries: entries, incomes: incomes });
-  if (!SHEET_URL) {
-    localStorage.setItem('chitieu_data', data);
-    render();
-    return;
+// ===== FORM =====
+function openForm(d) {
+  document.getElementById('overlay').classList.add('active');
+  if (d) {
+    editIdx = d.idx; document.getElementById('fAmt').value = d.amount;
+    document.getElementById('fCat').value = d.category; document.getElementById('fDate').value = d.date;
+    document.getElementById('fNote').value = d.note||'';
+    document.getElementById('fBtn').textContent = 'Luu'; document.getElementById('fTitle').textContent = 'Sua chi tieu';
+    selP = d.person;
+    document.querySelectorAll('.person-opt').forEach(function(el) {
+      el.className = 'person-opt';
+      if (el.dataset.p === selP) el.className = 'person-opt ' + (selP==='kha'?'a':'b');
+    });
+  } else {
+    editIdx = -1; document.getElementById('fAmt').value=''; document.getElementById('fCat').value='an';
+    document.getElementById('fDate').value=today(); document.getElementById('fNote').value='';
+    document.getElementById('fBtn').textContent = 'Them'; document.getElementById('fTitle').textContent = 'Them chi tieu';
+    selP='kha';
+    document.querySelectorAll('.person-opt').forEach(function(el) { el.className='person-opt'; if (el.dataset.p==='kha') el.className='person-opt a'; });
   }
-  // Save via POST (no-cors - fire and forget)
-  fetch(SHEET_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: data
-  }).then(function() { render(); }).catch(function() { render(); });
+  setTimeout(function() { document.getElementById('fAmt').focus(); }, 300);
 }
 
-function load() {
-  if (!SHEET_URL) {
-    try {
-      var d = localStorage.getItem('chitieu_data');
-      if (d) { var p = JSON.parse(d); entries = p.entries || []; incomes = p.incomes || []; }
-    } catch(e) {}
-    useDemoData();
-    return;
-  }
-  loading = true;
-  jsonp(SHEET_URL + '?action=read', function(data) {
-    loading = false;
-    if (data && data.entries) {
-      entries = (data.entries || []).map(function(e) { return {date:e.date, category:e.category, amount:Number(e.amount), person:e.person, note:e.note}; });
-      incomes = (data.incomes || []).map(function(e) { return {date:e.date, amount:Number(e.amount), note:e.note}; });
-      render();
-    } else {
-      toast('Khong the tai du lieu!', true);
-      useDemoData();
-    }
-  });
-}
+function editEntry(i) { var e=entries[i]; openForm({idx:i,amount:e.amount,category:e.category,date:e.date,person:e.person,note:e.note}); }
+function closeForm(e) { if (e&&e.target!==e.currentTarget) return; document.getElementById('overlay').classList.remove('active'); }
+function pickP(p) { selP=p; document.querySelectorAll('.person-opt').forEach(function(el) { el.className='person-opt'; if (el.dataset.p===p) el.className='person-opt '+(p==='kha'?'a':'b'); }); }
+function setF(f) { myF=f; document.querySelectorAll('.filter-chip').forEach(function(el) { el.classList.toggle('active',el.dataset.f===f); }); render(); }
 
-// === INCOME ===
-function addIncome() {
-  const amt = prompt('Nhap so tien thu nhap them:');
-  if (!amt || isNaN(amt) || Number(amt) <= 0) { toast('Nhap so tien!', true); return; }
-  const note = prompt('Ghi chu (vd: lam them, thuong...):') || '';
-  incomes.unshift({ date: today(), amount: Number(amt), note });
-  save();
-  toast('Da them thu nhap');
-}
-
-// === CRUD ===
 function submitEntry() {
   var amt = parseInt(document.getElementById('fAmt').value);
   var cat = document.getElementById('fCat').value;
   var dt = document.getElementById('fDate').value;
   var note = document.getElementById('fNote').value.trim();
-  if (!amt || amt <= 0) { toast('Nhap so tien!', true); return; }
-  if (!dt) { toast('Chon ngay!', true); return; }
-  if (editIdx >= 0) {
-    entries[editIdx] = { date: dt, category: cat, amount: amt, person: selPerson, note: note };
+  if (!amt||amt<=0) { toast('Nhap so tien!',true); return; }
+  if (!dt) { toast('Chon ngay!',true); return; }
+  if (editIdx>=0) {
+    entries[editIdx] = { date:dt, category:cat, amount:amt, person:selP, note:note };
     toast('Da cap nhat');
   } else {
-    entries.unshift({ date: dt, category: cat, amount: amt, person: selPerson, note: note });
+    entries.unshift({ date:dt, category:cat, amount:amt, person:selP, note:note });
     toast('Da them');
   }
-  save();
-  closeForm();
+  sync(); closeForm();
 }
 
-function delEntry(i) {
-  entries.splice(i, 1);
-  save();
-  toast('Da xoa');
+function delEntry(i) { entries.splice(i,1); sync(); toast('Da xoa'); }
+
+function addIncome() {
+  var amt = prompt('Nhap so tien thu nhap them:');
+  if (!amt||isNaN(amt)||Number(amt)<=0) { toast('Nhap so tien!',true); return; }
+  var note = prompt('Ghi chu (vd: lam them, thuong...):')||'';
+  incomes.unshift({ date:today(), amount:Number(amt), note:note });
+  sync(); toast('Da them thu nhap');
 }
 
-function useDemoData() {
-  if (entries.length > 0) { render(); return; }
-  entries = [
-    { date: '2026-07-05', category: 'an', amount: 35000, person: 'kha', note: 'An sang + cf' },
-    { date: '2026-07-05', category: 'an', amount: 42000, person: 'vy', note: 'An toi' },
-    { date: '2026-07-06', category: 'di_lai', amount: 20000, person: 'kha', note: 'Xe om' },
-    { date: '2026-07-06', category: 'an', amount: 15000, person: 'kha', note: 'Banh my' },
-    { date: '2026-07-06', category: 'mua_sam', amount: 120000, person: 'vy', note: 'My pham' },
-    { date: '2026-07-07', category: 'an', amount: 28000, person: 'kha', note: 'Com trua' },
-    { date: '2026-07-07', category: 'an', amount: 55000, person: 'vy', note: 'An vat' },
-    { date: '2026-07-07', category: 'giai_tri', amount: 45000, person: 'kha', note: 'Net' },
-  ];
-  incomes = [{ date: '2026-07-05', amount: 500000, note: 'Lam them cuoi tuan' }];
-  save();
-}
-
-// === RENDER ===
+// ===== RENDER =====
 function render() {
-  const list = document.getElementById('entriesList');
-  const empty = document.getElementById('emptyState');
-
-  let filtered = entries;
-  if (myFilter === 'kha') filtered = filtered.filter(e => e.person === 'kha');
-  if (myFilter === 'vy') filtered = filtered.filter(e => e.person === 'vy');
-
-  if (filtered.length === 0) {
-    list.innerHTML = '';
-    empty.style.display = 'block';
-  } else {
-    empty.style.display = 'none';
-    list.innerHTML = filtered.map((e, i) => {
-      const ri = entries.indexOf(e);
-      const av = e.person === 'kha' ? 'kha' : 'vy';
-      const dl = isToday(e.date) ? 'Hom nay' : shortD(e.date);
-      return '<div class="entry">'
-        + '<div class="entry-avatar ' + av + '">' + (e.person === 'kha' ? 'K' : 'V') + '</div>'
-        + '<div class="entry-body">'
-          + '<div class="entry-top">'
-            + '<span class="entry-name">' + (e.person === 'kha' ? 'Kha' : 'Vy') + '</span>'
-            + '<span class="entry-tag">' + (CATS[e.category] || e.category) + '</span>'
-          + '</div>'
-          + '<div class="entry-note">' + (e.note || '—') + '</div>'
-        + '</div>'
-        + '<div class="entry-side">'
-          + '<div class="entry-amount">' + fmt(e.amount) + '</div>'
-          + '<div class="entry-date">' + dl + '</div>'
-        + '</div>'
-        + '<div class="entry-actions">'
-          + '<button class="entry-btn" onclick="editEntry(' + ri + ')">&#9998;</button>'
-          + '<button class="entry-btn del" onclick="delEntry(' + ri + ')">&times;</button>'
-        + '</div>'
-      + '</div>';
+  var list = document.getElementById('eList'), empty = document.getElementById('eEmpty');
+  var f = entries;
+  if (myF==='kha') f=f.filter(function(e){return e.person==='kha';});
+  if (myF==='vy') f=f.filter(function(e){return e.person==='vy';});
+  if (f.length===0) { list.innerHTML=''; empty.style.display='block'; }
+  else {
+    empty.style.display='none';
+    list.innerHTML = f.map(function(e,i){
+      var ri = entries.indexOf(e), av = e.person==='kha'?'kha':'vy', dl = isT(e.date)?'Hom nay':shD(e.date);
+      return '<div class="entry"><div class="entry-av '+av+'">'+(e.person==='kha'?'K':'V')+'</div><div class="entry-bd"><div class="entry-top"><span class="entry-name">'+(e.person==='kha'?'Kha':'Vy')+'</span><span class="entry-tag">'+(CATS[e.category]||e.category)+'</span></div><div class="entry-note">'+(e.note||'—')+'</div></div><div class="entry-side"><div class="entry-amt">'+fmt(e.amount)+'</div><div class="entry-date">'+dl+'</div></div><button class="entry-btn" onclick="editEntry('+ri+')">&#9998;</button><button class="entry-btn del" onclick="delEntry('+ri+')">&times;</button></div>';
     }).join('');
   }
 
-  // Stats
-  const total = entries.reduce((s, e) => s + e.amount, 0);
-  const foodAmt = entries.filter(e => e.category === 'an').reduce((s, e) => s + e.amount, 0);
-  const khaAmt = entries.filter(e => e.person === 'kha').reduce((s, e) => s + e.amount, 0);
-  const vyAmt = entries.filter(e => e.person === 'vy').reduce((s, e) => s + e.amount, 0);
-  const todayAmt = entries.filter(e => e.date === today()).reduce((s, e) => s + e.amount, 0);
-  const foodToday = entries.filter(e => e.date === today() && e.category === 'an').reduce((s, e) => s + e.amount, 0);
-  const extraTotal = incomes.reduce(function(s, e) { return s + e.amount; }, 0);
-  const left = BUDGET + extraTotal - total;
-  const foodPct = Math.min(100, Math.round(foodAmt / FOOD_GOAL * 100));
-  const spentPct = Math.min(100, Math.round(total / BUDGET * 100));
+  var total = entries.reduce(function(s,e){return s+e.amount;},0);
+  var food = entries.filter(function(e){return e.category==='an';}).reduce(function(s,e){return s+e.amount;},0);
+  var khaA = entries.filter(function(e){return e.person==='kha';}).reduce(function(s,e){return s+e.amount;},0);
+  var vyA = entries.filter(function(e){return e.person==='vy';}).reduce(function(s,e){return s+e.amount;},0);
+  var tA = entries.filter(function(e){return e.date===today();}).reduce(function(s,e){return s+e.amount;},0);
+  var fT = entries.filter(function(e){return e.date===today()&&e.category==='an';}).reduce(function(s,e){return s+e.amount;},0);
+  var exT = incomes.reduce(function(s,e){return s+e.amount;},0);
+  var left = BUDGET + exT - total;
 
-  // Balance
-  document.getElementById('balVal').textContent = fmt(Math.max(left, 0));
-  document.getElementById('balVal').className = 'balance-value' + (left < 0 ? ' negative' : '');
-  document.getElementById('balKha').textContent = fmt(khaAmt);
-  document.getElementById('balVy').textContent = fmt(vyAmt);
-  document.getElementById('balToday').textContent = fmt(todayAmt);
+  document.getElementById('balVal').textContent = fmt(Math.max(left,0));
+  document.getElementById('balVal').className = 'balance-val'+(left<0?' neg':'');
+  document.getElementById('balKha').textContent = fmt(khaA);
+  document.getElementById('balVy').textContent = fmt(vyA);
+  document.getElementById('balToday').textContent = fmt(tA);
+  document.getElementById('bSpent').textContent = fmt(total);
+  document.getElementById('bExtra').textContent = '+' + fmt(exT);
+  document.getElementById('bLeft').textContent = fmt(Math.max(left,0));
 
-  // Budget
-  document.getElementById('budSpent').textContent = fmt(total);
-  document.getElementById('budExtra').textContent = '+' + fmt(extraTotal);
-  document.getElementById('budRemain').textContent = fmt(Math.max(left, 0));
-  document.getElementById('budRemain').style.color = left < 0 ? 'var(--color-ember)' : '';
+  var sp = Math.min(100, Math.round(total/BUDGET*100));
+  document.getElementById('pPct').textContent = sp+'%';
+  document.getElementById('pFill').style.width = sp+'%';
+  document.getElementById('pFill').className = 'prog-fill'+(sp>80?' danger':'');
+  document.getElementById('pSpent').textContent = fmt(total);
 
-  // Progress
-  document.getElementById('progPct').textContent = spentPct + '%';
-  const pf = document.getElementById('progFill');
-  pf.style.width = spentPct + '%';
-  pf.className = 'progress-fill' + (spentPct > 80 ? ' danger' : spentPct > 60 ? ' caution' : '');
-  document.getElementById('progSpent').textContent = fmt(total);
-
-  // Food
-  document.getElementById('foodTotal').textContent = fmt(foodAmt);
-  const ff = document.getElementById('foodFill');
-  ff.style.width = foodPct + '%';
-  ff.className = 'food-fill' + (foodPct > 80 ? ' over' : '');
-  document.getElementById('foodSpent').textContent = fmt(foodAmt);
-  document.getElementById('foodToday').textContent = fmt(foodToday);
+  var fp = Math.min(100, Math.round(food/FOOD_GOAL*100));
+  document.getElementById('fTotal').textContent = fmt(food);
+  document.getElementById('fFill').style.width = fp+'%';
+  document.getElementById('fFill').className = 'food-fill'+(fp>80?' over':'');
+  document.getElementById('fSpent').textContent = fmt(food);
+  document.getElementById('fToday').textContent = fmt(fT);
 }
 
-// === TOAST ===
-function toast(msg, err) {
-  const w = document.getElementById('toastWrap');
-  const t = document.createElement('div');
-  t.className = 'toast' + (err ? ' error' : '');
-  t.textContent = msg;
-  w.appendChild(t);
-  setTimeout(() => t.remove(), 2000);
-}
-
-// === INIT ===
-load();
+// ===== TOAST =====
+function toast(m,e) { var w=document.getElementById('tWrap'); var t=document.createElement('div'); t.className='toast'; t.textContent=m; w.appendChild(t); setTimeout(function(){t.remove();},2000); }
 </script>
 </body>
 </html>
