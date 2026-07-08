@@ -142,7 +142,7 @@ select.field-input { appearance:none; background-image:url("data:image/svg+xml,%
 <div class="budget-sec">
   <div class="sec-label">Ngân sách tháng</div>
   <div class="budget-grid">
-    <div class="b-cell"><div class="lbl">Thu nhap</div><div class="val plus">10.500.000</div></div>
+    <div class="b-cell"><div class="lbl">Thu nhập</div><div class="val plus">10.500.000</div></div>
     <div class="b-cell"><div class="lbl">Đã chi</div><div class="val minus" id="bSpent">0</div></div>
     <div class="b-cell"><div class="lbl" style="cursor:pointer;" onclick="addIncome()">+ Thu nhập thêm</div><div class="val plus" id="bExtra">0</div></div>
     <div class="b-cell"><div class="lbl">Góp xe</div><div class="val minus">-4.000.000</div></div>
@@ -166,7 +166,7 @@ select.field-input { appearance:none; background-image:url("data:image/svg+xml,%
 
 <!-- ADD -->
 <div class="add-wrap">
-  <button class="btn-add" onclick="openForm()">Thêm chi tiêu</button>
+  <button class="btn-add" onclick="openForm()">+ Thêm chi tiêu</button>
 </div>
 
 <!-- INCOME (hidden trigger) -->
@@ -195,9 +195,9 @@ select.field-input { appearance:none; background-image:url("data:image/svg+xml,%
     <div class="field"><label>Số tiền</label><input type="number" class="field-input" id="fAmt" placeholder="0" inputmode="numeric"></div>
     <div class="field"><label>Danh mục</label>
       <select class="field-input" id="fCat">
-        <option value="an">An uong</option><option value="di_lai">Di chuyen</option>
-        <option value="nha_cua">Nha cua</option><option value="mua_sam">Mua sam</option>
-        <option value="giai_tri">Giai tri</option><option value="khac">Khac</option>
+        <option value="an">Ăn uống</option><option value="di_lai">Di chuyển</option>
+        <option value="nha_cua">Nhà cửa</option><option value="mua_sam">Mua sắm</option>
+        <option value="giai_tri">Giải trí</option><option value="khac">Khác</option>
       </select>
     </div>
     <div class="field"><label>Ngày</label><input type="date" class="field-input" id="fDate"></div>
@@ -234,7 +234,7 @@ var db = firebase.database();
 var ref = db.ref('chitieu');
 
 // ===== DATA =====
-var CATS = { an:'An uong', di_lai:'Di chuyen', nha_cua:'Nha cua', mua_sam:'Mua sam', giai_tri:'Giai tri', khac:'Khac' };
+var CATS = { an:'Ăn uống', di_lai:'Di chuyển', nha_cua:'Nhà cửa', mua_sam:'Mua sắm', giai_tri:'Giải trí', khac:'Khác' };
 var entries = [], incomes = [], myF = 'all', selP = 'kha', editIdx = -1;
 var BUDGET = 4500000, FOOD_GOAL = 1200000;
 var demoLoaded = false;
@@ -261,16 +261,16 @@ ref.on('value', function(snap) {
 
 function useDemo() {
   entries = [
-    {date:'2026-07-05',category:'an',amount:35000,person:'kha',note:'An sang + cf'},
-    {date:'2026-07-05',category:'an',amount:42000,person:'vy',note:'An toi'},
-    {date:'2026-07-06',category:'di_lai',amount:20000,person:'kha',note:'Xe om'},
-    {date:'2026-07-06',category:'an',amount:15000,person:'kha',note:'Banh my'},
-    {date:'2026-07-06',category:'mua_sam',amount:120000,person:'vy',note:'My pham'},
-    {date:'2026-07-07',category:'an',amount:28000,person:'kha',note:'Com trua'},
-    {date:'2026-07-07',category:'an',amount:55000,person:'vy',note:'An vat'},
+    {date:'2026-07-05',category:'an',amount:35000,person:'kha',note:'Ăn sáng + cf'},
+    {date:'2026-07-05',category:'an',amount:42000,person:'vy',note:'Ăn tối'},
+    {date:'2026-07-06',category:'di_lai',amount:20000,person:'kha',note:'Xe ôm'},
+    {date:'2026-07-06',category:'an',amount:15000,person:'kha',note:'Bánh mỳ'},
+    {date:'2026-07-06',category:'mua_sam',amount:120000,person:'vy',note:'Mỹ phẩm'},
+    {date:'2026-07-07',category:'an',amount:28000,person:'kha',note:'Cơm trưa'},
+    {date:'2026-07-07',category:'an',amount:55000,person:'vy',note:'Ăn vặt'},
     {date:'2026-07-07',category:'giai_tri',amount:45000,person:'kha',note:'Net'},
   ];
-  incomes = [{date:'2026-07-05',amount:500000,note:'Lam them'}];
+  incomes = [{date:'2026-07-05',amount:500000,note:'Làm thêm'}];
   demoLoaded = true;
   sync();
   render();
@@ -287,7 +287,7 @@ function openForm(d) {
     editIdx = d.idx; document.getElementById('fAmt').value = d.amount;
     document.getElementById('fCat').value = d.category; document.getElementById('fDate').value = d.date;
     document.getElementById('fNote').value = d.note||'';
-    document.getElementById('fBtn').textContent = 'Luu'; document.getElementById('fTitle').textContent = 'Sua chi tieu';
+    document.getElementById('fBtn').textContent = 'Lưu'; document.getElementById('fTitle').textContent = 'Sửa chi tiêu';
     selP = d.person;
     document.querySelectorAll('.person-opt').forEach(function(el) {
       el.className = 'person-opt';
@@ -296,7 +296,7 @@ function openForm(d) {
   } else {
     editIdx = -1; document.getElementById('fAmt').value=''; document.getElementById('fCat').value='an';
     document.getElementById('fDate').value=today(); document.getElementById('fNote').value='';
-    document.getElementById('fBtn').textContent = 'Them'; document.getElementById('fTitle').textContent = 'Them chi tieu';
+    document.getElementById('fBtn').textContent = 'Thêm'; document.getElementById('fTitle').textContent = 'Thêm chi tiêu';
     selP='kha';
     document.querySelectorAll('.person-opt').forEach(function(el) { el.className='person-opt'; if (el.dataset.p==='kha') el.className='person-opt a'; });
   }
@@ -313,26 +313,26 @@ function submitEntry() {
   var cat = document.getElementById('fCat').value;
   var dt = document.getElementById('fDate').value;
   var note = document.getElementById('fNote').value.trim();
-  if (!amt||amt<=0) { toast('Nhap so tien!',true); return; }
-  if (!dt) { toast('Chon ngay!',true); return; }
+  if (!amt||amt<=0) { toast('Nhập số tiền!',true); return; }
+  if (!dt) { toast('Chọn ngày!',true); return; }
   if (editIdx>=0) {
     entries[editIdx] = { date:dt, category:cat, amount:amt, person:selP, note:note };
-    toast('Da cap nhat');
+    toast('Đã cập nhật');
   } else {
     entries.unshift({ date:dt, category:cat, amount:amt, person:selP, note:note });
-    toast('Da them');
+    toast('Đã thêm');
   }
   sync(); closeForm();
 }
 
-function delEntry(i) { entries.splice(i,1); sync(); toast('Da xoa'); }
+function delEntry(i) { entries.splice(i,1); sync(); toast('Đã xoá'); }
 
 function addIncome() {
-  var amt = prompt('Nhap so tien thu nhap them:');
-  if (!amt||isNaN(amt)||Number(amt)<=0) { toast('Nhap so tien!',true); return; }
-  var note = prompt('Ghi chu (vd: lam them, thuong...):')||'';
+  var amt = prompt('Nhập số tiền thu nhập thêm:');
+  if (!amt||isNaN(amt)||Number(amt)<=0) { toast('Nhập số tiền!',true); return; }
+  var note = prompt('Ghi chú (vd: làm thêm, thưởng...):')||'';
   incomes.unshift({ date:today(), amount:Number(amt), note:note });
-  sync(); toast('Da them thu nhap');
+  sync(); toast('Đã thêm thu nhập');
 }
 
 // ===== RENDER =====
@@ -345,7 +345,7 @@ function render() {
   else {
     empty.style.display='none';
     list.innerHTML = f.map(function(e,i){
-      var ri = entries.indexOf(e), av = e.person==='kha'?'kha':'vy', dl = isT(e.date)?'Hom nay':shD(e.date);
+      var ri = entries.indexOf(e), av = e.person==='kha'?'kha':'vy', dl = isT(e.date)?'Hôm nay':shD(e.date);
       return '<div class="entry"><div class="entry-av '+av+'">'+(e.person==='kha'?'K':'V')+'</div><div class="entry-bd"><div class="entry-top"><span class="entry-name">'+(e.person==='kha'?'Kha':'Vy')+'</span><span class="entry-tag">'+(CATS[e.category]||e.category)+'</span></div><div class="entry-note">'+(e.note||'—')+'</div></div><div class="entry-side"><div class="entry-amt">'+fmt(e.amount)+'</div><div class="entry-date">'+dl+'</div></div><button class="entry-btn" onclick="editEntry('+ri+')">&#9998;</button><button class="entry-btn del" onclick="delEntry('+ri+')">&times;</button></div>';
     }).join('');
   }
