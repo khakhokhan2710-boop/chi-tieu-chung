@@ -657,6 +657,10 @@ select.field-input {
       <div class="val minus" id="budSpent">0</div>
     </div>
     <div class="budget-cell">
+      <div class="lbl" style="cursor:pointer;" onclick="addIncome()">+ Thu nhập thêm</div>
+      <div class="val plus" id="budExtra">0</div>
+    </div>
+    <div class="budget-cell">
       <div class="lbl">Góp xe</div>
       <div class="val minus">-4.000.000</div>
     </div>
@@ -781,7 +785,7 @@ const SHEET_URL = 'https://script.google.com/macros/s/AKfycbywE6CZiY8fWDBIEj24ll
 
 // === DATA ===
 const CATS = { an:'An uong', di_lai:'Di chuyen', nha_cua:'Nha cua', mua_sam:'Mua sam', giai_tri:'Giai tri', khac:'Khac' };
-let entries = [], myFilter = 'all', selPerson = 'kha', editIdx = -1;
+let entries = [], incomes = [], myFilter = 'all', selPerson = 'kha', editIdx = -1;
 let loading = false;
 
 const INCOME = 10500000, CAR = 4000000, PARENTS = 2000000, BUDGET = INCOME - CAR - PARENTS;
@@ -864,6 +868,16 @@ function setFilter(f) {
   render();
 }
 
+// === INCOME ===
+function addIncome() {
+  const amt = prompt('Nhap so tien thu nhap them:');
+  if (!amt || isNaN(amt) || Number(amt) <= 0) { toast('Nhap so tien!', true); return; }
+  const note = prompt('Ghi chu (vd: lam them, thuong...):') || '';
+  incomes.unshift({ date: today(), amount: Number(amt), note });
+  save();
+  toast('Da them thu nhap');
+}
+
 // === CRUD ===
 function submitEntry() {
   const amt = parseInt(document.getElementById('fAmt').value);
@@ -892,27 +906,25 @@ function delEntry(i) {
 }
 
 function save() {
+  const data = JSON.stringify({ entries, incomes });
   if (!SHEET_URL) {
-    localStorage.setItem('chitieu_entries', JSON.stringify(entries));
+    localStorage.setItem('chitieu_data', data);
     render();
     return;
   }
-  // Ghi len Google Sheet
   fetch(SHEET_URL, {
     method: 'POST',
     mode: 'no-cors',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ entries })
-  }).then(r => { render(); })
-    .catch(e => { toast('Loi ket noi sheet!', true); render(); });
+    body: data
+  }).then(r => render()).catch(e => { toast('Loi ket noi sheet!', true); render(); });
 }
 
 function load() {
   if (!SHEET_URL) {
-    // Fallback: localStorage
     try {
-      const d = localStorage.getItem('chitieu_entries');
-      if (d) entries = JSON.parse(d);
+      const d = localStorage.getItem('chitieu_data');
+      if (d) { const p = JSON.parse(d); entries = p.entries || []; incomes = p.incomes || []; }
     } catch(e) {}
     useDemoData();
     return;
@@ -922,6 +934,7 @@ function load() {
     .then(r => r.json())
     .then(data => {
       entries = (data.entries || []).map(e => ({...e, amount: Number(e.amount)}));
+      incomes = (data.incomes || []).map(e => ({...e, amount: Number(e.amount)}));
       loading = false;
       render();
     })
@@ -934,16 +947,8 @@ function load() {
 
 function useDemoData() {
   if (entries.length > 0) { render(); return; }
-  entries = [
-    { date: '2026-07-05', category: 'an', amount: 35000, person: 'kha', note: 'An sang + cf' },
-    { date: '2026-07-05', category: 'an', amount: 42000, person: 'vy', note: 'An toi' },
-    { date: '2026-07-06', category: 'di_lai', amount: 20000, person: 'kha', note: 'Xe om' },
-    { date: '2026-07-06', category: 'an', amount: 15000, person: 'kha', note: 'Banh my' },
-    { date: '2026-07-06', category: 'mua_sam', amount: 120000, person: 'vy', note: 'My pham' },
-    { date: '2026-07-07', category: 'an', amount: 28000, person: 'kha', note: 'Com trua' },
-    { date: '2026-07-07', category: 'an', amount: 55000, person: 'vy', note: 'An vat' },
-    { date: '2026-07-07', category: 'giai_tri', amount: 45000, person: 'kha', note: 'Net' },
-  ];
+  entries = [ /*...demo...*/ ];
+  incomes = [{ date:'2026-07-05', amount:500000, note:'Lam them cuoi tuan' }];
   save();
 }
 
@@ -993,7 +998,7 @@ function render() {
   const vyAmt = entries.filter(e => e.person === 'vy').reduce((s, e) => s + e.amount, 0);
   const todayAmt = entries.filter(e => e.date === today()).reduce((s, e) => s + e.amount, 0);
   const foodToday = entries.filter(e => e.date === today() && e.category === 'an').reduce((s, e) => s + e.amount, 0);
-  const left = BUDGET - total;
+  const left = BUDGET + extraTotal - total;
   const foodPct = Math.min(100, Math.round(foodAmt / FOOD_GOAL * 100));
   const spentPct = Math.min(100, Math.round(total / BUDGET * 100));
 
@@ -1006,6 +1011,8 @@ function render() {
 
   // Budget
   document.getElementById('budSpent').textContent = fmt(total);
+  const extraTotal = incomes.reduce((s, e) => s + e.amount, 0);
+  document.getElementById('budExtra').textContent = '+' + fmt(extraTotal);
   document.getElementById('budRemain').textContent = fmt(Math.max(left, 0));
   document.getElementById('budRemain').style.color = left < 0 ? 'var(--color-ember)' : '';
 
